@@ -1,0 +1,76 @@
+body{
+    background-image:url(/img/descarga.gif);
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: red;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    h1{
+        text-transform: uppercase;
+        border-style: solid;
+        border-color: whitesmoke;
+        padding: 2rem;
+    }
+    .seccion1-ingresomensual{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        label{
+            font-size: 2rem;
+            text-transform: uppercase;
+        }
+        input{
+            height: 2rem;
+        }
+        button{
+            color: white;
+            background-color: red;
+            border-radius: 2rem;
+            padding: 2rem;
+        }
+        #detalles{
+            h2{
+                border-style: solid;
+                padding: 1rem;
+            }
+            text-align: center;
+            
+            ul{
+                list-style: none;
+                color: whitesmoke;
+                font-size: 2rem;
+          
+            }
+        }
+
+
+    }
+    h2{
+        text-transform: uppercase;
+        color: whitesmoke;
+    }
+
+    #menu{
+        color: whitesmoke;
+        display: flex;
+        text-align: center;
+    }
+    #total{
+        text-align: center;
+        h2{
+            border-style: solid;
+            padding: 1rem;
+        }
+        p{
+            color: whitesmoke;
+            font-size: 2rem;
+        }
+
+    }
+
+
+ 
+}
