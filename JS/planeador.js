@@ -164,5 +164,37 @@ function cargarGastos() {
         listadoDeGastos = JSON.parse(gastosGuardados).map(gasto => new AgregarGastos(gasto.nombre, gasto.precio, gasto.cuotas));
     }
 }
+// Función para cargar los datos del archivo JSON
+function cargarGastos() {
+    // Intentamos cargar el ingreso desde localStorage
+    const ingresoGuardado = localStorage.getItem('ingresoMensual');
+    if (ingresoGuardado) {
+        ingresoMensual = parseInt(ingresoGuardado);
+        document.getElementById('ingresoMensual').value = ingresoMensual;
+    }
+
+ // Usamos fetch para cargar los datos de gastos desde gastos.json
+    fetch('/JS/gastos.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al cargar el archivo JSON');
+            }
+            return response.json();  // Parseamos el archivo JSON
+        })
+        .then(gastos => {
+            // Si se cargan datos, mapeamos los datos y los asignamos a la lista de gastos
+            listadoDeGastos = gastos.map(gasto => new AgregarGastos(gasto.nombre, gasto.precio, gasto.cuotas));
+            // Si el archivo JSON no tiene datos, aseguramos que la lista de gastos esté vacía
+            if (listadoDeGastos.length === 0) {
+                listadoDeGastos = [];
+            }
+        })
+        .catch(error => {
+            // Si ocurre un error (por ejemplo, el archivo no se encuentra), mostramos un mensaje
+            console.error('Error al cargar los gastos:', error);
+            mostrarSweetAlert('Error al cargar los gastos desde el archivo JSON.', 'error');
+        });
+}
 
 window.onload = cargarGastos;
+
