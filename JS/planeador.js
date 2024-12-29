@@ -174,7 +174,7 @@ function cargarGastos() {
     }
 
  // Usamos fetch para cargar los datos de gastos desde gastos.json
-    fetch("../JS/gastos.json")
+    fetch("./gastos.json")
         .then(response => {
             if (!response.ok) {
                 throw new Error('Error al cargar el archivo JSON');
