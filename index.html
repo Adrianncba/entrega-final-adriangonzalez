@@ -10,21 +10,22 @@
     <h1>TERCER PRE ENTREGA ADRIAN GONZALEZ</h1>
     <h2>Bienvenidos al planeador simple de gastos</h2>
 
-    <div class= "seccion1-ingresomensual" id="app">
+    <div class="seccion1-ingresomensual" id="app">
         <label for="ingresoMensual">Ingrese su ingreso mensual</label>
         <input type="number" id="ingresoMensual" />
         <button id="iniciarBtn">Iniciar</button>
 
         <div id="menu" style="display:none;">
             <h2>MENU DE TAREAS</h2>
-            <button class= "estilos-botones" id="modificarIngresoBtn">Modificar ingreso mensual</button>
-            <button class= "estilos-botones" id="agregarGastoBtn">Ingresar gasto mensual</button>
-            <button class= "estilos-botones" id="detallesGastosBtn">Ver detalles de gastos</button>
-            <button class= "estilos-botones" id="totalGastosBtn">Ver gasto mensual total</button>
-            <button class= "estilos-botones" id="eliminarGastoBtn">Eliminar gasto</button>
-            <button class= "estilos-botones" id="salirBtn">BORRAR DATOS</button>
+            <button class="estilos-botones" id="modificarIngresoBtn">Modificar ingreso mensual</button>
+            <button class="estilos-botones" id="agregarGastoBtn">Ingresar gasto mensual</button>
+            <button class="estilos-botones" id="detallesGastosBtn">Ver detalles de gastos</button>
+            <button class="estilos-botones" id="totalGastosBtn">Ver gasto mensual total</button>
+            <button class="estilos-botones" id="eliminarGastoBtn">Eliminar gasto</button>
+            <button class="estilos-botones" id="salirBtn">BORRAR DATOS</button>
         </div>
 
+        <!-- Modificar ingreso -->
         <div id="modificarIngreso" style="display:none;">
             <h2>Modificar ingreso mensual</h2>
             <input type="number" id="nuevoIngreso" placeholder="Nuevo ingreso" />
@@ -32,6 +33,7 @@
             <h4 id="muetraIngresoModificado" style="display:none"> SU INGRESO SE HA MODIFICADO CON EXITO</h4>
         </div>
 
+        <!-- Agregar gasto -->
         <div id="agregarGasto" style="display:none;">
             <h2>Ingresar nuevo gasto</h2>
             <input type="text" id="nombreGasto" placeholder="Nombre del gasto" />
@@ -40,23 +42,27 @@
             <button id="agregarBtn">Añadir gasto</button>
         </div>
 
+        <!-- Eliminar gasto -->
         <div id="eliminarGasto" style="display:none;">
             <h2>Eliminar un gasto</h2>
             <input type="text" id="nombreEliminar" placeholder="Nombre del gasto a eliminar" />
             <button id="eliminarBtn">Eliminar</button>
         </div>
 
+        <!-- Detalles de gastos -->
         <div id="detalles" style="display:none;">
             <h2>Detalles de gastos</h2>
             <ul id="listadoGastos"></ul>
         </div>
-
+        
+        <!-- Total de gastos -->
         <div id="total" style="display:none;">
             <h2>Total de gastos</h2>
             <p id="totalGastos"></p>
+            <p id="saldoRestante"></p>  
         </div>
-    </div>
 
     <script src="JS/planeador.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>

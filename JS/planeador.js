@@ -16,42 +16,29 @@ class AgregarGastos {
 
 // Función para iniciar el planeador
 function iniciarPlaneador() {
-    ingresoMensual = parseInt(document.getElementById('ingresoMensual').value);
+    const { value: ingreso } = document.getElementById('ingresoMensual'); // Desestructuración de value
+    ingresoMensual = parseInt(ingreso);
+
     if (ingresoMensual > 0) {
         localStorage.setItem('ingresoMensual', ingresoMensual); // Guardar en localStorage
         cargarGastos(); // Cargar los gastos guardados
         document.getElementById('menu').style.display = 'block';
         document.getElementById('ingresoMensual').disabled = true;
-        mostrarMensaje('Ingreso mensual establecido correctamente.');
+        mostrarSweetAlert('Ingreso mensual establecido correctamente.', 'success');
     } else {
-        mostrarMensaje('Por favor, ingrese un valor de ingreso mensual correcto.', 'error');
+        mostrarSweetAlert('Por favor, ingrese un valor de ingreso mensual correcto.', 'error');
     }
 }
-
 document.getElementById('iniciarBtn').addEventListener('click', iniciarPlaneador);
 
-// Función para mostrar mensaje en un h4
-function mostrarMensaje(mensaje, tipo = 'success') {
-    const mensajeElemento = document.createElement('h4');
-    mensajeElemento.textContent = mensaje;
-
-    // Estilo para los mensajes
-    if (tipo === 'error') {
-        mensajeElemento.style.color = 'red';
-    } else {
-        mensajeElemento.style.color = 'green';
-    }
-
-    // Añadir el mensaje en el contenedor de mensajes
-    const mensajeContenedor = document.getElementById('muetraIngresoModificado');
-    mensajeContenedor.style.display = 'block'; // Hacer visible el mensaje
-    mensajeContenedor.innerHTML = ''; // Limpiar mensajes previos
-    mensajeContenedor.appendChild(mensajeElemento);
-
-    // Eliminar el mensaje después de 3 segundos
-    setTimeout(() => {
-        mensajeContenedor.style.display = 'none';
-    }, 3000);
+// Función para mostrar SweetAlert
+function mostrarSweetAlert(mensaje, tipo = 'success') {
+    Swal.fire({
+        icon: tipo,
+        title: mensaje,
+        showConfirmButton: false,
+        timer: 2000
+    });
 }
 
 // Función para ocultar solo las secciones de resolución
@@ -62,117 +49,107 @@ function ocultarResoluciones() {
     });
 }
 
-// Función para mostrar la sección de modificar ingreso
-function mostrarModificarIngreso() {
+// Modificar ingreso mensual
+document.getElementById('modificarIngresoBtn').addEventListener('click', function () {
     ocultarResoluciones();
     document.getElementById('modificarIngreso').style.display = 'block';
-}
+});
 
-document.getElementById('modificarIngresoBtn').addEventListener('click', mostrarModificarIngreso);
-
-// Función para actualizar el ingreso mensual
-function modificarIngreso() {
-    ingresoMensual = parseInt(document.getElementById('nuevoIngreso').value);
-    if (ingresoMensual > 0) {
-        localStorage.setItem('ingresoMensual', ingresoMensual); // Actualizar en localStorage
-        mostrarMensaje('¡Su ingreso mensual ha sido actualizado con éxito!');
-        document.getElementById('modificarIngreso').style.display = 'none';
+// Actualizar ingreso mensual
+document.getElementById('actualizarIngresoBtn').addEventListener('click', function () {
+    const nuevoIngreso = parseInt(document.getElementById('nuevoIngreso').value);
+    if (nuevoIngreso > 0) {
+        ingresoMensual = nuevoIngreso;
+        localStorage.setItem('ingresoMensual', ingresoMensual);
+        document.getElementById('muetraIngresoModificado').style.display = 'block';
+        setTimeout(() => {
+            document.getElementById('muetraIngresoModificado').style.display = 'none';
+        }, 2000);
     } else {
-        mostrarMensaje('Por favor, ingrese un valor correcto.', 'error');
+        mostrarSweetAlert('Por favor, ingrese un valor de ingreso válido.', 'error');
     }
-}
+});
 
-document.getElementById('actualizarIngresoBtn').addEventListener('click', modificarIngreso);
-
-// Función para agregar un gasto
-
-function agregarGasto() {
-    const nombre = document.getElementById('nombreGasto').value;
-    const precio = parseInt(document.getElementById('precioGasto').value);
-    const cuotas = parseInt(document.getElementById('cuotasGasto').value);
-
-   
-    if (nombre && precio > 0 && cuotas > 0) {
-        const nuevoGasto = new AgregarGastos(nombre, precio, cuotas);
-        listadoDeGastos.push(nuevoGasto);
-        localStorage.setItem('listadoDeGastos', JSON.stringify(listadoDeGastos)); 
-        mostrarMensaje('¡Gasto agregado con éxito!');
-
-        document.getElementById('nombreGasto').value = '';  
-        document.getElementById('precioGasto').value = '';  
-        document.getElementById('cuotasGasto').value = ''; 
-
-        // Ocultar la sección de añadir gasto
-        document.getElementById('agregarGasto').style.display = 'none';
-    } else {
-        mostrarMensaje('Por favor ingrese todos los datos correctamente.', 'error');
-    }
-}
-
-document.getElementById('agregarGastoBtn').addEventListener('click', () => {
+// Agregar nuevo gasto
+document.getElementById('agregarGastoBtn').addEventListener('click', function () {
     ocultarResoluciones();
     document.getElementById('agregarGasto').style.display = 'block';
 });
 
-document.getElementById('agregarBtn').addEventListener('click', agregarGasto);
+// Guardar gasto
+document.getElementById('agregarBtn').addEventListener('click', function () {
+    const nombre = document.getElementById('nombreGasto').value;
+    const precio = parseFloat(document.getElementById('precioGasto').value);
+    const cuotas = parseInt(document.getElementById('cuotasGasto').value);
 
-// Función para mostrar detalles de los gastos
-function mostrarDetallesGastos() {
-    const listadoElement = document.getElementById('listadoGastos');
-    listadoElement.innerHTML = '';
-    listadoDeGastos.forEach(gasto => {
-        const li = document.createElement('li');
-        li.textContent = `Nombre: ${gasto.nombre}, Precio: ${gasto.precio}, Cuotas: ${gasto.cuotas}`;
-        listadoElement.appendChild(li);
-    });
-    ocultarResoluciones();
-    document.getElementById('detalles').style.display = 'block';
-}
-
-document.getElementById('detallesGastosBtn').addEventListener('click', mostrarDetallesGastos);
-
-// Función para ver el total de los gastos
-function verTotalGastos() {
-    const total = listadoDeGastos.reduce((sumaTotal, gasto) => sumaTotal + gasto.dividirCuotas(), 0);
-    document.getElementById('totalGastos').textContent = `Total a pagar este mes: $${total}`;
-    ocultarResoluciones();
-    document.getElementById('total').style.display = 'block';
-}
-
-document.getElementById('totalGastosBtn').addEventListener('click', verTotalGastos);
-
-// Función para eliminar un gasto
-function eliminarGasto() {
-    const nombreEliminar = document.getElementById('nombreEliminar').value;
-    const index = listadoDeGastos.findIndex(gasto => gasto.nombre === nombreEliminar);
-    if (index !== -1) {
-        listadoDeGastos.splice(index, 1);
-        localStorage.setItem('listadoDeGastos', JSON.stringify(listadoDeGastos)); // Actualizar listado en localStorage
-        mostrarMensaje('Gasto eliminado con éxito.');
-        document.getElementById('eliminarGasto').style.display = 'none';
+    if (nombre && precio > 0 && cuotas > 0) {
+        const nuevoGasto = new AgregarGastos(nombre, precio, cuotas);
+        listadoDeGastos.push(nuevoGasto);
+        localStorage.setItem('listadoDeGastos', JSON.stringify(listadoDeGastos));
+        mostrarSweetAlert('Gasto agregado correctamente.', 'success');
+        document.getElementById('nombreGasto').value = '';
+        document.getElementById('precioGasto').value = '';
+        document.getElementById('cuotasGasto').value = '';
     } else {
-        mostrarMensaje('No se encontró el gasto con ese nombre.', 'error');
+        mostrarSweetAlert('Por favor, complete todos los campos correctamente.', 'error');
     }
-}
+});
 
-document.getElementById('eliminarGastoBtn').addEventListener('click', () => {
+// Eliminar un gasto
+document.getElementById('eliminarGastoBtn').addEventListener('click', function () {
     ocultarResoluciones();
     document.getElementById('eliminarGasto').style.display = 'block';
 });
 
-document.getElementById('eliminarBtn').addEventListener('click', eliminarGasto);
+// Eliminar gasto específico
+document.getElementById('eliminarBtn').addEventListener('click', function () {
+    const nombreEliminar = document.getElementById('nombreEliminar').value;
+    listadoDeGastos = listadoDeGastos.filter(gasto => gasto.nombre !== nombreEliminar);
+    localStorage.setItem('listadoDeGastos', JSON.stringify(listadoDeGastos));
+    mostrarSweetAlert('Gasto eliminado correctamente.', 'success');
+});
 
-// Función para salir y reiniciar la interfaz
-function detener() {
+// Mostrar detalles de los gastos
+document.getElementById('detallesGastosBtn').addEventListener('click', function () {
+    const listadoElement = document.getElementById('listadoGastos');
+    listadoElement.innerHTML = '';  // Limpiar el listado
+
+    if (listadoDeGastos.length === 0) {
+        listadoElement.innerHTML = '<li>No hay gastos registrados.</li>';
+    } else {
+        listadoDeGastos.forEach(gasto => {
+            const cuotaMensual = gasto.dividirCuotas().toFixed(2);
+            
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <div class="gasto-item">
+                    <p class="gasto-nombre">Gasto: ${gasto.nombre}</p>
+                    <p class="gasto-precio"><strong>Precio total:</strong> $${gasto.precio}</p>
+                    <p class="gasto-cuotas"><strong>Cuotas:</strong> ${gasto.cuotas}</p>
+                    <p class="gasto-pago-cuota"><strong>Pago por cuota:</strong> $${cuotaMensual}</p>
+                </div>
+            `;
+            listadoElement.appendChild(li);
+        });
+        
+    }
     ocultarResoluciones();
-    document.getElementById('ingresoMensual').disabled = false;
-    document.getElementById('ingresoMensual').value = '';
-    localStorage.removeItem('ingresoMensual');
-    listadoDeGastos = [];
-    localStorage.removeItem('listadoDeGastos');
-}
+    document.getElementById('detalles').style.display = 'block';
+});
 
-document.getElementById('salirBtn').addEventListener('click', detener);
+// Ver el total de gastos
+document.getElementById('totalGastosBtn').addEventListener('click', function () {
+    const total = listadoDeGastos.reduce((sumaTotal, gasto) => sumaTotal + gasto.dividirCuotas(), 0);
+    const saldoRestante = ingresoMensual - total;
+
+    document.getElementById('totalGastos').textContent = `Total a pagar este mes por cuotas: $${total.toFixed(2)}`;
+    document.getElementById('saldoRestante').textContent = saldoRestante >= 0
+        ? `Te sobra $${saldoRestante.toFixed(2)} después de cubrir los gastos.`
+        : `¡Te has excedido! Necesitas $${Math.abs(saldoRestante).toFixed(2)} más.`;
+
+    ocultarResoluciones();
+    document.getElementById('total').style.display = 'block';
+});
 
 // Función para cargar los datos del almacenamiento local
 function cargarGastos() {
@@ -184,7 +161,7 @@ function cargarGastos() {
 
     const gastosGuardados = localStorage.getItem('listadoDeGastos');
     if (gastosGuardados) {
-        listadoDeGastos = JSON.parse(gastosGuardados);
+        listadoDeGastos = JSON.parse(gastosGuardados).map(gasto => new AgregarGastos(gasto.nombre, gasto.precio, gasto.cuotas));
     }
 }
 

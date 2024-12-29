@@ -1,0 +1,22 @@
+[
+    {
+        "nombre": "Computadora gamer",
+        "precio": 70000,
+        "cuotas": 12
+    },
+    {
+        "nombre": "Aire acondicionado",
+        "precio": 80000,
+        "cuotas": 12
+    },
+    {
+        "nombre": "Obra social",
+        "precio": 30000,
+        "cuotas": 1
+    },
+    {
+        "nombre": "Seguro auto",
+        "precio": 50000,
+        "cuotas": 1
+    }
+]
